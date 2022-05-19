@@ -24,14 +24,14 @@ const ScrambledText = props => {
   const wrapper = (0, _react.useRef)();
   const {
     children,
-    delay,
+    delay = 2,
     onComplete = () => null,
     placeHolder = ''
   } = props;
-  const [scrambledText, setScrambledText] = (0, _react.useState)((0, _server.renderToStaticMarkup)(children));
+  const [scrambledText, setScrambledText] = (0, _react.useState)('');
   (0, _react.useEffect)(() => {
-    scramblerRef.current.scramble(scrambledText, setScrambledText, delay, onComplete, placeHolder);
-  }, [null]);
+    scramblerRef.current.scramble((0, _server.renderToStaticMarkup)(children), setScrambledText, delay, onComplete, placeHolder); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [children]);
   return /*#__PURE__*/_react.default.createElement("span", {
     ref: wrapper,
     dangerouslySetInnerHTML: {
