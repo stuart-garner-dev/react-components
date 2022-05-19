@@ -9,6 +9,8 @@ require("core-js/modules/web.dom-collections.iterator.js");
 
 var _react = _interopRequireWildcard(require("react"));
 
+var _server = require("react-dom/server");
+
 var _Scrambler = _interopRequireDefault(require("./Scrambler.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -19,19 +21,17 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 
 const ScrambledText = props => {
   const scramblerRef = (0, _react.useRef)(new _Scrambler.default());
+  const wrapper = (0, _react.useRef)();
   const {
-    text
+    children,
+    onComplete = () => null
   } = props;
-  const [scrambledText, setScrambledText] = (0, _react.useState)(text);
+  const [scrambledText, setScrambledText] = (0, _react.useState)((0, _server.renderToStaticMarkup)(children));
   (0, _react.useEffect)(() => {
-    scramblerRef.current.scramble(text, onScramble);
-  }, [text]);
-
-  const onScramble = value => {
-    setScrambledText(value);
-  };
-
+    scramblerRef.current.scramble(scrambledText, setScrambledText, props.delay, onComplete);
+  }, [null]);
   return /*#__PURE__*/_react.default.createElement("span", {
+    ref: wrapper,
     dangerouslySetInnerHTML: {
       __html: scrambledText
     }

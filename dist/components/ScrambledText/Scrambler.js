@@ -1,28 +1,23 @@
-export default class Scrambler {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+require("core-js/modules/web.dom-collections.iterator.js");
+
+require("core-js/modules/es.regexp.exec.js");
+
+require("core-js/modules/es.string.split.js");
+
+class Scrambler {
   static get CHARACTERS() {
     return {
-      DEFAULT: [
-        '!',
-        '@',
-        '#',
-        '-',
-        '{',
-        '~',
-        '`',
-        '"',
-        '/',
-        '*',
-        '+',
-        '=',
-        '}',
-        '*',
-        '&',
-        '%',
-        '$',
-        '|',
-      ],
+      DEFAULT: ['!', '@', '#', '-', '{', '~', '`', '"', '/', '*', '+', '=', '}', '*', '&', '%', '$', '|']
     };
   }
+
   constructor() {
     this.characters = [...Scrambler.CHARACTERS.DEFAULT];
     this.onScramble = null;
@@ -39,11 +34,13 @@ export default class Scrambler {
     this._getCharactersToEncode = this._getCharactersToEncode.bind(this);
   }
 
-  scramble(text, onScramble, delay = 2) {
+  scramble(text, onScramble) {
+    let delay = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 2;
     this.targetText = text.split('');
     this.encodedText = this.targetText;
     this.onScramble = onScramble;
     this.delay = delay;
+
     this._getCharactersToEncode();
   }
 
@@ -58,6 +55,7 @@ export default class Scrambler {
           ignore = false;
           return;
         }
+
         if (!ignore) {
           this.characterArray.push({
             target: character,
@@ -65,7 +63,7 @@ export default class Scrambler {
             index: index,
             loops: this._randomIntFromInterval(3, 6),
             loopComplete: 0,
-            complete: false,
+            complete: false
           });
           this.targetText[index] = ' ';
         }
@@ -82,6 +80,7 @@ export default class Scrambler {
       if (this.characterIndex < this.characterArray.length) {
         this.characterIndex++;
       }
+
       this.characterArray.forEach((item, index) => {
         if (index < this.characterIndex) {
           this._encode(item, index);
@@ -89,6 +88,7 @@ export default class Scrambler {
       });
       this.onScramble(this.targetText.join(''));
     }
+
     if (this.characterArray.length > 0) {
       this.enterFrame = requestAnimationFrame(this._update);
     } else {
@@ -98,10 +98,8 @@ export default class Scrambler {
 
   _encode(item, index) {
     if (item.loopComplete !== item.loops) {
-      const newText =
-        this.characters[
-          this._randomIntFromInterval(0, this.characters.length - 1)
-        ];
+      const newText = this.characters[this._randomIntFromInterval(0, this.characters.length - 1)];
+
       item.display = newText;
       this.targetText[item.index] = item.display;
       item.loopComplete++;
@@ -115,4 +113,7 @@ export default class Scrambler {
   _randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
+
 }
+
+exports.default = Scrambler;
