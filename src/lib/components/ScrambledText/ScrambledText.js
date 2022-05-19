@@ -7,21 +7,25 @@ const ScrambledText = (props) => {
   const scramblerRef = useRef(new Scrambler());
   const wrapper = useRef();
 
-  const { children, delay, onComplete = () => null, placeHolder = '' } = props;
+  const {
+    children,
+    delay = 2,
+    onComplete = () => null,
+    placeHolder = '',
+  } = props;
 
-  const [scrambledText, setScrambledText] = useState(
-    renderToStaticMarkup(children)
-  );
+  const [scrambledText, setScrambledText] = useState('');
 
   useEffect(() => {
     scramblerRef.current.scramble(
-      scrambledText,
+      renderToStaticMarkup(children),
       setScrambledText,
       delay,
       onComplete,
       placeHolder
     );
-  }, [null]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [children]);
 
   return (
     <span

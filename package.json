@@ -25,7 +25,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.12.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
