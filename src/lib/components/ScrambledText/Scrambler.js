@@ -6,7 +6,7 @@ export default class Scrambler {
         '@',
         '#',
         '-',
-        '_',
+        '{',
         '~',
         '`',
         '"',
@@ -14,6 +14,7 @@ export default class Scrambler {
         '*',
         '+',
         '=',
+        '}',
         '*',
         '&',
         '%',
@@ -32,15 +33,17 @@ export default class Scrambler {
     this.characterArray = null;
     this.currentFrame = 0;
     this.characterIndex = 0;
+    this.delay = 2;
     this._update = this._update.bind(this);
     this._encode = this._encode.bind(this);
     this._getCharactersToEncode = this._getCharactersToEncode.bind(this);
   }
 
-  scramble(text, onScramble) {
+  scramble(text, onScramble, delay = 2) {
     this.targetText = text.split('');
     this.encodedText = this.targetText;
     this.onScramble = onScramble;
+    this.delay = delay;
     this._getCharactersToEncode();
   }
 
@@ -64,7 +67,7 @@ export default class Scrambler {
             loopComplete: 0,
             complete: false,
           });
-          this.targetText[index] = '';
+          this.targetText[index] = ' ';
         }
       }
     });
@@ -75,7 +78,7 @@ export default class Scrambler {
   _update() {
     this.currentFrame++;
 
-    if (this.currentFrame % 2 === 0) {
+    if (this.currentFrame % this.delay === 0) {
       if (this.characterIndex < this.characterArray.length) {
         this.characterIndex++;
       }
@@ -95,9 +98,10 @@ export default class Scrambler {
 
   _encode(item, index) {
     if (item.loopComplete !== item.loops) {
-      const newText = this.characters[
-        this._randomIntFromInterval(0, this.characters.length - 1)
-      ];
+      const newText =
+        this.characters[
+          this._randomIntFromInterval(0, this.characters.length - 1)
+        ];
       item.display = newText;
       this.targetText[item.index] = item.display;
       item.loopComplete++;
