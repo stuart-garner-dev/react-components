@@ -39,11 +39,13 @@ export default class Scrambler {
     this._getCharactersToEncode = this._getCharactersToEncode.bind(this);
   }
 
-  scramble(text, onScramble, delay = 2) {
+  scramble(text, onScramble, delay = 2, onComplete = null, placeHolder = '') {
     this.targetText = text.split('');
     this.encodedText = this.targetText;
     this.onScramble = onScramble;
     this.delay = delay;
+    this.placeHolder = placeHolder;
+    this.onComplete = onComplete;
     this._getCharactersToEncode();
   }
 
@@ -67,7 +69,7 @@ export default class Scrambler {
             loopComplete: 0,
             complete: false,
           });
-          this.targetText[index] = ' ';
+          this.targetText[index] = this.placeHolder;
         }
       }
     });
@@ -93,6 +95,7 @@ export default class Scrambler {
       this.enterFrame = requestAnimationFrame(this._update);
     } else {
       cancelAnimationFrame(this.enterFrame);
+      if (this.onComplete) this.onComplete();
     }
   }
 

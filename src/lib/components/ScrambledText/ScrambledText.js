@@ -7,7 +7,7 @@ const ScrambledText = (props) => {
   const scramblerRef = useRef(new Scrambler());
   const wrapper = useRef();
 
-  const { children, onComplete = () => null } = props;
+  const { children, delay, onComplete = () => null, placeHolder = '' } = props;
 
   const [scrambledText, setScrambledText] = useState(
     renderToStaticMarkup(children)
@@ -17,8 +17,9 @@ const ScrambledText = (props) => {
     scramblerRef.current.scramble(
       scrambledText,
       setScrambledText,
-      props.delay,
-      onComplete
+      delay,
+      onComplete,
+      placeHolder
     );
   }, [null]);
 

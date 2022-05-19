@@ -36,10 +36,14 @@ class Scrambler {
 
   scramble(text, onScramble) {
     let delay = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 2;
+    let onComplete = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+    let placeHolder = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : '';
     this.targetText = text.split('');
     this.encodedText = this.targetText;
     this.onScramble = onScramble;
     this.delay = delay;
+    this.placeHolder = placeHolder;
+    this.onComplete = onComplete;
 
     this._getCharactersToEncode();
   }
@@ -65,7 +69,7 @@ class Scrambler {
             loopComplete: 0,
             complete: false
           });
-          this.targetText[index] = ' ';
+          this.targetText[index] = this.placeHolder;
         }
       }
     });
@@ -93,6 +97,7 @@ class Scrambler {
       this.enterFrame = requestAnimationFrame(this._update);
     } else {
       cancelAnimationFrame(this.enterFrame);
+      if (this.onComplete) this.onComplete();
     }
   }
 
